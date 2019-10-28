@@ -78,18 +78,18 @@ class ViewController: NSViewController {
     }
     
     @IBAction func clickCheckUpdate(_ sender: NSButton) {
-        NSWorkspace.shared().open(URL(string: "https://github.com/netyouli/WHC_ScanUnreferenceImageTool")!)
+        NSWorkspace.shared.open(URL(string: "https://github.com/netyouli/WHC_ScanUnreferenceImageTool")!)
     }
     
     @IBAction func clickAbout(_ sender: NSButton) {
-        NSWorkspace.shared().open(URL(string: "https://github.com/netyouli/")!)
+        NSWorkspace.shared.open(URL(string: "https://github.com/netyouli/")!)
     }
     
     @IBAction func clickOpenDirectory(_ sender: NSButton) {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
-        if openPanel.runModal() == NSModalResponseOK {
+        if openPanel.runModal() == NSApplication.ModalResponse.OK {
             self.directoryText.stringValue = (openPanel.directoryURL?.path)!
         }
     }
@@ -100,7 +100,7 @@ class ViewController: NSViewController {
     
     @IBAction func clickStartScan(_ sender: NSButton) {
         sender.isEnabled = false
-        if (iOSRadio.state == 1) {
+        if (iOSRadio.state.rawValue == 1) {
             scanProjectType = .iOS
         }else {
             scanProjectType = .android
@@ -145,7 +145,7 @@ class ViewController: NSViewController {
                     }
                     if !isReference {
                         self.noReferenceImageNameArray.append(imageName)
-                        let originTxt = self.resultContentView.string == nil ? "" : self.resultContentView.string!
+                        let originTxt = self.resultContentView.string == nil ? "" : self.resultContentView.string
                         DispatchQueue.main.sync(execute: {
                             var noReferenceImageName = ">>>>> " + self.imageFileNameMap[imageName]!
                             if noReferenceImageName.hasSuffix(".imageset") {
@@ -162,16 +162,16 @@ class ViewController: NSViewController {
                     alert.addButton(withTitle: "保存")
                     alert.addButton(withTitle: "取消")
                     alert.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) in
-                        if modalResponse == 1000 {
+                        if modalResponse.rawValue == 1000 {
                             let savaPanel = NSSavePanel()
                             savaPanel.message = "Choose the path to save the document"
                             savaPanel.allowedFileTypes = ["txt"]
                             savaPanel.allowsOtherFileTypes = false
                             savaPanel.canCreateDirectories = true
                             savaPanel.beginSheetModal(for: self.view.window!, completionHandler: {[unowned self] (code) in
-                                if code == 1 {
+                                if code.rawValue == 1 {
                                     do {
-                                        let originTxt = self.resultContentView.string == nil ? "" : self.resultContentView.string!
+                                        let originTxt = self.resultContentView.string == nil ? "" : self.resultContentView.string
                                         try originTxt.write(toFile: savaPanel.url!.path, atomically: true, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
                                     }catch {
                                         print("写文件异常")
